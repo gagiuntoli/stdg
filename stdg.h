@@ -20,4 +20,6 @@ void vector_pop(Vector *vector, void *value);
 
 void vector_clear(Vector *vector);
 
+char** file_to_string_array(char *file_path);
+
 #endif
