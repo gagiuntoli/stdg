@@ -6,9 +6,9 @@
 #include <string.h>
 
 typedef struct {
-    unsigned int data_size; // size of each element in bytes
-    unsigned int length;    // quantity of elements currently stored
-    unsigned int capacity;  // available capacity
+    size_t data_size; // size of each element in bytes
+    size_t length;    // quantity of elements currently stored
+    size_t capacity;  // available capacity
     char *data;
 } Vector;
 
@@ -18,8 +18,10 @@ void vector_push(Vector *vector, void *value);
 
 void vector_pop(Vector *vector, void *value);
 
+void vector_get(Vector *vector, void *value, size_t index);
+
 void vector_clear(Vector *vector);
 
-char** file_to_string_array(char *file_path);
+Vector file_to_string_array(char *file_path);
 
 #endif
