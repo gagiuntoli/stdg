@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct {
     size_t data_size; // size of each element in bytes
@@ -15,7 +16,11 @@ typedef struct {
 
 Vector vector_create(unsigned int data_size);
 
+typedef bool (*equal)(const void *a, const void *b);
+typedef char* (*void_to_str)(void *value);
+
 void vector_push(Vector *vector, void *value);
+void vector_push_unique(Vector *vector, void *value, equal);
 
 void vector_pop(Vector *vector, void *value);
 
@@ -23,9 +28,11 @@ void vector_get(Vector *vector, void *value, size_t index);
 
 void vector_clear(Vector *vector);
 
-char* str2str(void *value);
+void vector_print(Vector *vector, void_to_str);
+char* str2str(void *a);
 
-void vector_print(Vector *vector, char* void2str(void*));
+bool vector_contains(Vector *vector, void *value, equal);
+bool str_equal(const void *a, const void *b);
 
 Vector file_to_string_array(char *file_path);
 

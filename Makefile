@@ -1,11 +1,11 @@
 all: stdg
 
-FLAGS=-g
+FLAGS=-g -fPIC
 
 STDGI=.
 
 stdg: files.o vector.o string.o
-	gcc -shared -o stdg.so $^
+	gcc -shared $(FLAGS) -o stdg.so $^
 
 %.o: %.c
 	gcc $(FLAGS) -c $^ -o $@ -I $(STDGI)
