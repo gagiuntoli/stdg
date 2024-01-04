@@ -23,6 +23,12 @@ void vector_get(Vector *vector, void *value, size_t index);
 
 void vector_clear(Vector *vector);
 
+char * str2str(void *value);
+
+void vector_print(Vector *vector, char* void2str(void*));
+
 Vector file_to_string_array(char *file_path);
+
+Vector string_split(char *str, const char * delimiter);
 
 #endif

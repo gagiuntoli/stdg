@@ -1,17 +1,13 @@
-all: stdg examples
+all: stdg
 
-#examples: vector
 FLAGS=-g
 
 STDGI=.
 
-stdg: files.o vector.o
-	gcc -shared -o stdg.so vector.o files.o
+stdg: files.o vector.o string.o
+	gcc -shared -o stdg.so $^
 
-vector.o: vector.c
-	gcc $(FLAGS) -c $^ -o $@
-
-files.o: files.c
+%.o: %.c
 	gcc $(FLAGS) -c $^ -o $@ -I $(STDGI)
 
 #vector: stdg examples/vector.c stdg.h

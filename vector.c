@@ -44,3 +44,13 @@ void vector_clear(Vector *vector) {
     free(vector->data);
     vector->data = NULL;
 }
+
+void vector_print(Vector *vector, char* void2str(void*)) {
+    printf("[");
+    for (int i = 0; i < vector->length; i++) {
+        char *value;
+        vector_get(vector, &value, i);
+        printf("%s%s", void2str(value), i < (vector->length - 1) ? "," : "");
+    }
+    printf("]\n");
+}
