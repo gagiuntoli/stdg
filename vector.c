@@ -45,6 +45,10 @@ void vector_clear(Vector *vector) {
     vector->data = NULL;
 }
 
+char* str2str(void *value) {
+	return value;
+}
+
 void vector_print(Vector *vector, char* void2str(void*)) {
     printf("[");
     for (int i = 0; i < vector->length; i++) {
