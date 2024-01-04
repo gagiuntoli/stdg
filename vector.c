@@ -1,6 +1,4 @@
 #include "stdg.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 Vector vector_create(unsigned int data_size) {
     Vector vector = {.data_size = data_size, .length = 0, .capacity = 0, .data = NULL};
@@ -9,7 +7,6 @@ Vector vector_create(unsigned int data_size) {
 }
 
 void vector_push(Vector *vector, void *value) {
-    //printf("value: %s", (char *)value);
     void *data;
     if (vector->length == vector->capacity) {
         if (vector->capacity == 0) {
