@@ -1,9 +1,14 @@
 #include "stdg.h"
 
-Vector vector_create(unsigned int data_size) {
+Vector *vector_create(size_t data_size) {
+    Vector *vector = malloc(sizeof(Vector));
+
     void *data = malloc(data_size);
 
-    Vector vector = {.data_size = data_size, .length = 0, .capacity = 1, .data = data};
+    vector->data_size = data_size;
+    vector->data = data;
+    vector->capacity = 1;
+    vector->length = 0;
 
     return vector;
 }

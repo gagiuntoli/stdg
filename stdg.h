@@ -17,11 +17,10 @@ typedef struct {
     char *data;
 } Vector;
 
-Vector vector_create(unsigned int data_size);
-
 typedef bool (*equal)(const void *a, const void *b);
 typedef char* (*void_to_str)(void *value);
 
+Vector *vector_create(size_t data_size);
 void vector_push(Vector *vector, void *value);
 void vector_push_unique(Vector *vector, void *value, equal);
 void vector_pop(Vector *vector, void *value);
@@ -36,12 +35,12 @@ bool str_equal(const void *a, const void *b);
 //
 // Files
 //
-Vector file_to_string_array(char *file_path);
+Vector *file_to_string_array(char *file_path);
 
 //
 // String
 //
-Vector string_split(char *str, const char * delimiter);
+Vector *string_split(char *str, const char *delimiter);
 void string_trim_right(char *str, const char delimiter);
 
 

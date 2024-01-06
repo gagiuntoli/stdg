@@ -1,6 +1,6 @@
 #include "stdg.h"
 
-Vector file_to_string_array(char *file_path) {
+Vector *file_to_string_array(char *file_path) {
 	FILE *fp = NULL;
 	size_t len = 0;
 	size_t read = 0;
@@ -13,9 +13,9 @@ Vector file_to_string_array(char *file_path) {
 		exit(1);
 	}
 
-	Vector lines = vector_create(sizeof(char *));
+	Vector *lines = vector_create(sizeof(char *));
 	while ((read = getline(&line, &len, fp)) != -1) {
-		vector_push(&lines, &line);
+		vector_push(lines, &line);
 		line = NULL;
 	}
 
