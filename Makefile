@@ -4,7 +4,7 @@ FLAGS=-g -fPIC
 
 STDGI=.
 
-stdg: files.o vector.o string.o
+stdg: files.o vector.o string.o map.o
 	gcc -shared $(FLAGS) -o stdg.so $^
 
 %.o: %.c
