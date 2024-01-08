@@ -87,3 +87,22 @@ Value *map_get(Map *map, const Key *key) {
 	}
 	return NULL;
 }
+
+void map_print(Map *map, char *print_key(const Key *key), char *print_value(const Value *value)) {
+	int i;
+	bool first_printed = false;
+	printf("{");
+	for (i = 0; i < TOTAL_BUCKETS; i++) {
+		Bucket *current = map->buckets[i];
+		while (current != NULL) {
+			const char *separator = first_printed ? ", " : "";
+			printf("%s[%s]: %s", separator, print_key(current->key), print_value(current->value));
+
+			current = current->next;
+
+			if (!first_printed)
+				first_printed = true;
+		}
+	}
+	printf("}\n");
+}
