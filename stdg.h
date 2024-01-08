@@ -49,19 +49,29 @@ void string_trim_right(char *str, const char delimiter);
 //
 #define TOTAL_BUCKETS 256
 
+typedef struct Key_ {
+	size_t size;
+	char data[];
+} Key;
+
+typedef struct Value_ {
+	size_t size;
+	char data[];
+} Value;
+
 typedef struct Bucket_ {
-	char *key;
-	char *value;
 	struct Bucket_ *next;
+        Key *key;
+        Value *value;
 } Bucket;
 
 typedef struct {
 	Bucket **buckets;
 } Map;
 
-unsigned long hash(const char *str);
+int hash(const Key *key);
 Map *map_create();
-int map_insert(Map *map, const char *key, const char *value);
-char *map_get(Map *map, const char *key);
+int map_insert(Map *map, const Key *key, const Value *value);
+Value *map_get(Map *map, const Key *key);
 
 #endif

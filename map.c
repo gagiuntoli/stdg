@@ -1,9 +1,9 @@
 #include "stdg.h"
 
-unsigned long hash(const char *str) {
-	unsigned long result = 0;
-	int c;
-	while ((c = *str++) != 0) {
+int hash(const Key *key) {
+	int result = 0, i, c;
+	for (i = 0; i < key->size; i++) {
+		c = key->data[i];
 		result += c;
 		result *= 17;
 		result %= 256;
@@ -22,56 +22,68 @@ Map *map_create() {
 	return map;
 }
 
-int map_insert(Map *map, const char *key, const char *value) {
-	unsigned long index = hash(key);
-	size_t value_len = strlen(value);
+Bucket *bucket_create(const Key *key, const Value *value) {
+	Bucket *bucket = malloc(sizeof(Bucket));
+
+	bucket->value = malloc(sizeof(Value) + value->size);
+	bucket->value->size = value->size;
+	memcpy(bucket->value->data, value->data, value->size);
+
+	bucket->key = malloc(sizeof(Key) + key->size);
+	bucket->key->size = key->size;
+	memcpy(bucket->key->data, key->data, key->size);
+
+	bucket->next = NULL;
+	return bucket;
+}
+
+int map_insert(Map *map, const Key *key, const Value *value) {
+	int index = hash(key);
+
+	if (index >= TOTAL_BUCKETS) {
+		return 1;
+	}
 
 	if (map->buckets[index] == NULL) {
-		Bucket *new_bucket = malloc(sizeof(Bucket));
-		new_bucket->key = strdup(key);
-		new_bucket->value = strdup(value);
-		new_bucket->next = NULL;
+		Bucket *new_bucket = bucket_create(key, value);
 		map->buckets[index] = new_bucket;
+		return 0;
 	}
 
-	Bucket *curr_bucket = map->buckets[index];
+	Bucket *previous = map->buckets[index];
+	Bucket *current = previous->next;
 
-	while (curr_bucket->next != NULL) {
-		// check if a bucket matches the key 
-		if (strcmp(curr_bucket->key, key) == 0) {
-			// check if the existing size is less that what is needed
-			if (strlen(curr_bucket->value) < value_len) {
-				if (realloc(curr_bucket->value, value_len + 1) == NULL) {
-					return 1;
-				}
-			}
+	while (current != NULL) {
+		// check if a bucket with the same key already exists in the list 
+		if (current->key->size == key->size && memcmp(current->key->data, key->data, key->size) == 0) {
+			free(current->value);
 
-			strcpy(curr_bucket->value, value);
+			current->value = malloc(sizeof(Value) + value->size);
+			current->value->size = value->size;
+			memcpy(current->value->data, value->data, value->size);
+			
 			return 0;
 		}
-		curr_bucket = curr_bucket->next;
+		previous = current;
+		current = current->next;
 	}
-	// they key wasn't found so insert a new bucket
-	Bucket *new_bucket = malloc(sizeof(Bucket));
-	new_bucket->key = strdup(key);
-	new_bucket->value = strdup(value);
-	new_bucket->next = NULL;
 
-	curr_bucket->next = new_bucket;
+	// insert in the last position
+	Bucket *new_bucket = bucket_create(key, value);
+	previous->next = new_bucket;
 	return 0;
 }
 
-char *map_get(Map *map, const char *key) {
-	unsigned long index = hash(key);
+Value *map_get(Map *map, const Key *key) {
+ 	int index = hash(key);
 
-	Bucket *curr_bucket = map->buckets[index];
+ 	Bucket *current = map->buckets[index];
 
-	while (curr_bucket != NULL) {
-		// check if a bucket matches the key 
-		if (strcmp(curr_bucket->key, key) == 0) {
-			return curr_bucket->value;
+	while (current != NULL) {
+		if (memcmp(current->key->data, key->data, key->size) == 0) {
+			return current->value;
 		}
-		curr_bucket = curr_bucket->next;
+		current = current->next;
 	}
 	return NULL;
 }
