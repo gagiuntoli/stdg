@@ -88,7 +88,7 @@ Value *map_get(Map *map, const Key *key) {
 	return NULL;
 }
 
-void map_print(Map *map, char *print_key(const Key *key), char *print_value(const Value *value)) {
+void map_print(Map *map, void print_key(const Key *key), void print_value(const Value *value)) {
 	int i;
 	bool first_printed = false;
 	printf("{");
@@ -96,7 +96,10 @@ void map_print(Map *map, char *print_key(const Key *key), char *print_value(cons
 		Bucket *current = map->buckets[i];
 		while (current != NULL) {
 			const char *separator = first_printed ? ", " : "";
-			printf("%s[%s]: %s", separator, print_key(current->key), print_value(current->value));
+			printf("%s[", separator); 
+			print_key(current->key);
+			printf("]: ");
+			print_value(current->value);
 
 			current = current->next;
 

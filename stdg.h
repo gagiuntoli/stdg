@@ -73,6 +73,6 @@ int hash(const Key *key);
 Map *map_create();
 int map_insert(Map *map, const Key *key, const Value *value);
 Value *map_get(Map *map, const Key *key);
-void map_print(Map *map, char *print_key(const Key *key), char *print_value(const Value *value));
+void map_print(Map *map, void print_key(const Key *key), void print_value(const Value *value));
 
 #endif

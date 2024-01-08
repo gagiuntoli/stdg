@@ -1,11 +1,12 @@
 #include "stdg.h"
 #include <assert.h>
 
-char *print_key(const Key *key) {
-	return (char *)key->data;
+void print_key(const Key *key) {
+	printf("%s", (char *)key->data);
 }
-char *print_value(const Value *value) {
-	return (char *)value->data;
+
+void print_value(const Value *value) {
+	printf("%s", (char *)value->data);
 }
 
 void insert(Map *map, const char *key_c, const char *value_c) {
