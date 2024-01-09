@@ -13,13 +13,16 @@ Vector *file_to_string_array(char *file_path) {
 		exit(1);
 	}
 
-	Vector *lines = vector_create(sizeof(char *));
+	Vector *vector = vector_create();
 	while ((read = getline(&line, &len, fp)) != -1) {
-		vector_push(lines, &line);
+		Value *value = malloc(sizeof(Value) + strlen(line) + 1);
+		value->size = strlen(line) + 1;
+		memcpy(value->data, line, value->size);
+		vector_push(vector, value);
 		line = NULL;
 	}
 
 	fclose(fp);
 
-	return lines;
+	return vector;
 }
