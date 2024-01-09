@@ -2,13 +2,18 @@
 
 /* Splits a string depending on the delimiter passed. Returns a vector with every part. */
 Vector *string_split(char *str, const char *delimiter) {
-	Vector *vector = vector_create(sizeof(char *));
+	Vector *vector = vector_create();
 	char* token = strtok(str, " ");
 
 	while (token != NULL) {
 		char *token_dup = strdup(token);
 		string_trim_right(token_dup, '\n');
-		vector_push(vector, &token_dup);
+
+		Value *value = malloc(sizeof(Value) + strlen(token_dup) + 1);
+		value->size = strlen(token_dup) + 1;
+		memcpy(value->data, token_dup, value->size);
+		vector_push(vector, value);
+
 		token = strtok(NULL, delimiter);
 	}
 	return vector;

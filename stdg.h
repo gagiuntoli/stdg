@@ -38,7 +38,7 @@ bool vector_contains(Vector *vector, const Value *value);
 //
 // Files
 //
-Vector *file_to_string_array(char *file_path);
+Vector *files_get_lines(const char *file_path);
 
 //
 // String

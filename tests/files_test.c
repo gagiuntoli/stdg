@@ -6,7 +6,7 @@ void print_value(const Value *value) {
 }
 
 int main() {
-	Vector *vector = file_to_string_array("./tests/inputa.dat");
+	Vector *vector = files_get_lines("./tests/inputa.dat");
 
 	assert(vector->length == 12);
 	vector_print(vector, print_value);

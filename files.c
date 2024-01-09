@@ -1,6 +1,6 @@
 #include "stdg.h"
 
-Vector *file_to_string_array(char *file_path) {
+Vector *files_get_lines(const char *file_path) {
 	FILE *fp = NULL;
 	size_t len = 0;
 	size_t read = 0;
