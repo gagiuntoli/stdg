@@ -4,9 +4,9 @@ FLAGS=-g -fPIC
 
 STDGI=.
 
-tests: map_test
+tests: map_test vector_test
 
-map_test: map_test.c stdg.so
+%_test: %_test.c stdg.so
 	gcc $(FLAGS) $^ -I $(STDGI) -o $@ 
 
 stdg.so: files.o vector.o string.o map.o
@@ -15,7 +15,8 @@ stdg.so: files.o vector.o string.o map.o
 %.o: %.c
 	gcc $(FLAGS) -c $^ -o $@ -I $(STDGI)
 
-test: map_test
+test: tests
+	./vector_test
 	./map_test
 
 clean:

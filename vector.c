@@ -1,86 +1,90 @@
 #include "stdg.h"
 
-Vector *vector_create(size_t data_size) {
+Vector *vector_create() {
     Vector *vector = malloc(sizeof(Vector));
 
-    void *data = malloc(data_size);
-
-    vector->data_size = data_size;
-    vector->data = data;
     vector->capacity = 1;
+    vector->values = malloc(vector->capacity * sizeof(Value *));
     vector->length = 0;
 
     return vector;
 }
 
-void vector_push(Vector *vector, void *value) {
-    void *data;
+int vector_push(Vector *vector, const Value *value) {
     if (vector->length == vector->capacity) {
         vector->capacity *= 2;
-        data = malloc(vector->data_size * vector->capacity);
-        memcpy(data, vector->data, vector->data_size * vector->length);
-        free(vector->data);
-        vector->data = data;
+        vector->values = realloc(vector->values, vector->capacity * sizeof(Value *));
     }
 
-    memcpy(vector->data + vector->data_size * vector->length, value, vector->data_size);
+    vector->values[vector->length] = malloc(sizeof(Value) + value->size);
+    memcpy(vector->values[vector->length], value, sizeof(Value) + value->size);
     vector->length++;
+
+    return 0;
 }
 
-void vector_push_unique(Vector *vector, void *value, equal equal_) {
-    if (!vector_contains(vector, value, equal_)) {
+/* pushes a value to the vector if it doesn't exist and returns 0.
+ * If the value already exists, nothing happens and the function returns 1.
+ */
+int vector_push_unique(Vector *vector, const Value *value) {
+    if (!vector_contains(vector, value)) {
         vector_push(vector, value);
+        return 0;
     }
+    return 1;
 }
 
-void vector_pop(Vector *vector, void *value) {
+Value *vector_pop(Vector *vector) {
     if (vector->length > 0) {
         vector->length--;
-        memcpy(value, vector->data + vector->data_size * vector->length, vector->data_size);
+
+        Value *last = vector->values[vector->length];
+        Value *result = malloc(sizeof(Value) + last->size);
+        memcpy(result, last, sizeof(Value) + last->size);
+
+        free(last);
+
+        return result;
     }
+    return NULL;
 }
 
-void vector_get(Vector *vector, void *value, size_t index) {
+Value *vector_get(Vector *vector, size_t index) {
     if (index < vector->length) {
-        memcpy(value, vector->data + vector->data_size * index, vector->data_size);
+        return vector->values[index];
     }
+    return NULL;
 }
 
-bool vector_contains(Vector *vector, void *value, equal equal_) {
+bool vector_contains(Vector *vector, const Value *value) {
     for (int i = 0; i < vector->length; i++) {
-        void *current = NULL;
-        vector_get(vector, &current, i);
+        Value *current = vector->values[i];
         if (current == NULL) {
             exit(1);
         }
-        if (equal_(current, value)) {
+        if (current->size == value->size && memcmp(current->data, value->data, value->size) == 0) {
             return true;
         }
     }
     return false;
 }
 
-void vector_clear(Vector *vector) {
+int vector_clear(Vector *vector) {
     vector->capacity = 0;
-    vector->length = 0;
-    free(vector->data);
-    vector->data = NULL;
+    for (int i = 0; i < vector->length; i++) {
+        free(vector->values[i]);
+    }
+    free(vector->values);
+    return 0;
 }
 
-char* str2str(void *value) {
-	return value;
-}
-
-bool str_equal(const void *a, const void *b) {
-	return strcmp(a, *(char**)b) == 0 ? true : false;
-}
-
-void vector_print(Vector *vector, char* void2str(void*)) {
+void vector_print(Vector *vector, void print_value(const Value *value)) {
     printf("[");
     for (int i = 0; i < vector->length; i++) {
-        char *value;
-        vector_get(vector, &value, i);
-        printf("%s%s", void2str(value), i < (vector->length - 1) ? "," : "");
+        Value *value = vector_get(vector, i);
+        const char *separator = (i != vector->length-1) ? ", " : "";
+        print_value(value);
+        printf("%s",separator);
     }
     printf("]\n");
 }

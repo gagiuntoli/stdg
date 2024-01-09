@@ -2,4 +2,4 @@
 *.o
 *.so
 *.a
-map_test
+*_test
