@@ -51,9 +51,20 @@ Value *vector_pop(Vector *vector) {
 
 Value *vector_get(Vector *vector, size_t index) {
     if (index < vector->length) {
-        return vector->values[index];
+        Value *value = malloc(sizeof(Value) + vector->values[index]->size);
+        memcpy(value, vector->values[index], sizeof(Value) + vector->values[index]->size);
+        return value;
     }
     return NULL;
+}
+
+int vector_get_index(Vector *vector, const Value *value) {
+    for (int i = 0; i < vector->length; i++) {
+        if (vector->values[i]->size == value->size && memcmp(vector->values[i]->data, value->data, value->size) == 0) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 bool vector_contains(Vector *vector, const Value *value) {

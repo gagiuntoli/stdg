@@ -15,6 +15,8 @@ Vector *string_split(char *str, const char *delimiter) {
 		vector_push(vector, value);
 
 		token = strtok(NULL, delimiter);
+		free(token_dup);
+		free(value);
 	}
 	return vector;
 }

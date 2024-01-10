@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <assert.h>
 
 typedef struct Key_ {
 	size_t size;
@@ -31,6 +32,7 @@ int vector_push(Vector *vector, const Value *value);
 int vector_push_unique(Vector *vector, const Value *value);
 Value *vector_pop(Vector *vector);
 Value *vector_get(Vector *vector, size_t index);
+int vector_get_index(Vector *vector, const Value *value);
 int vector_clear(Vector *vector);
 void vector_print(Vector *vector, void print_value(const Value *value));
 bool vector_contains(Vector *vector, const Value *value);
@@ -65,6 +67,7 @@ int hash(const Key *key);
 Map *map_create();
 int map_insert(Map *map, const Key *key, const Value *value);
 Value *map_get(Map *map, const Key *key);
+bool map_exists(Map *map, const Key *key);
 void map_print(Map *map, void print_key(const Key *key), void print_value(const Value *value));
 
 #endif

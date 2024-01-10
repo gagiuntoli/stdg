@@ -33,6 +33,14 @@ char *get(Map *map, const char *key_c) {
 	return NULL;
 }
 
+bool exists(Map *map, const char *key_c) {
+	Key *key = malloc(sizeof(Key) + strlen(key_c) + 1);
+	key->size = strlen(key_c) + 1;
+	strcpy(key->data, key_c);
+
+	return map_exists(map, key);
+}
+
 int main() {
 	Map *map = map_create();
 
@@ -41,10 +49,18 @@ int main() {
 	insert(map, "p3", "Saul");
 	insert(map, "A name", "A surname");
 
+	assert(exists(map, "person 1") == true);
+	assert(exists(map, "person 2") == true);
+	assert(exists(map, "p3") == true);
+	assert(exists(map, "p4") == false);
+	assert(exists(map, "A name") == true);
+	assert(exists(map, "A Name") == false);
+
 	assert(strcmp(get(map, "person 1"), "guido") == 0);
 	assert(strcmp(get(map, "person 2"), "peter") == 0);
 	assert(strcmp(get(map, "p3"), "Saul") == 0);
 	assert(strcmp(get(map, "A name"), "A surname") == 0);
+
 
 	map_print(map, print_key, print_value);
 

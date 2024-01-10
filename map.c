@@ -1,4 +1,5 @@
 #include "stdg.h"
+#include <assert.h>
 
 int hash(const Key *key) {
 	int result = 0, i, c;
@@ -8,6 +9,8 @@ int hash(const Key *key) {
 		result *= 17;
 		result %= 256;
 	}
+	printf("hash = %d\n", result);
+	assert(result >= 0 && result < 256);
 	return result;
 }
 
@@ -75,9 +78,9 @@ int map_insert(Map *map, const Key *key, const Value *value) {
 }
 
 Value *map_get(Map *map, const Key *key) {
- 	int index = hash(key);
+	int index = hash(key);
 
- 	Bucket *current = map->buckets[index];
+	Bucket *current = map->buckets[index];
 
 	while (current != NULL) {
 		if (memcmp(current->key->data, key->data, key->size) == 0) {
@@ -86,6 +89,20 @@ Value *map_get(Map *map, const Key *key) {
 		current = current->next;
 	}
 	return NULL;
+}
+
+bool map_exists(Map *map, const Key *key) {
+ 	int index = hash(key);
+
+ 	Bucket *current = map->buckets[index];
+
+	while (current != NULL) {
+		if (current->key->size == key->size && memcmp(current->key->data, key->data, key->size) == 0) {
+			return true;
+		}
+		current = current->next;
+	}
+	return false;
 }
 
 void map_print(Map *map, void print_key(const Key *key), void print_value(const Value *value)) {
