@@ -70,4 +70,10 @@ Value *map_get(Map *map, const Key *key);
 bool map_exists(Map *map, const Key *key);
 void map_print(Map *map, void print_key(const Key *key), void print_value(const Value *value));
 
+//
+// Math
+//
+int min(int a, int b);
+int max(int a, int b);
+
 #endif

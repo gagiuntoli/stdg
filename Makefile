@@ -9,7 +9,7 @@ tests: map_test vector_test files_test
 %_test: tests/%_test.c stdg.so
 	gcc $(FLAGS) $^ -I $(STDGI) -o $@ 
 
-stdg.so: files.o vector.o string.o map.o
+stdg.so: files.o vector.o string.o map.o math.o
 	gcc -shared $(FLAGS) -o $@ $^
 
 %.o: %.c
